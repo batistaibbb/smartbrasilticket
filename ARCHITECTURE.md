@@ -331,7 +331,7 @@ Todas as tabelas têm RLS habilitado:
 - ✅ Comprovantes
 
 ### Fase 2: Melhorias
-- [ ] Email de confirmação (Resend/SendGrid)
+- [ ] Email de confirmação (abortado por enquanto — exige domínio próprio verificado; status visível na plataforma)
 - [ ] Upload de atestado médico
 - [ ] QR Code para check-in no evento
 - [ ] Área do organizador

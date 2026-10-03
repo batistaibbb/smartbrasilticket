@@ -66,7 +66,8 @@ interface Registration {
   tshirtSize: string;
   kitId?: string;
   kitName?: string;
-  status: 'pending_payment' | 'confirmed' | 'cancelled';
+  // 'rejected' = pagamento recusado pelo Mercado Pago (webhook) — exibido como "Cancelada"
+  status: 'pending_payment' | 'confirmed' | 'cancelled' | 'rejected';
   paymentId?: string;
   confirmationCode: string;
   createdAt: string;

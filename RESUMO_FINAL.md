@@ -50,25 +50,17 @@
 
 ---
 
-### 4. ✅ Sistema de Emails e Comprovantes
-**Status:** Concluído
+### 4. Sistema de Comprovantes (Emails abortado por enquanto)
+**Status:** Comprovantes concluídos / Emails NÃO implementados
+
+> ⚠️ **Decisão (out/2026):** A integração de emails transacionais (Resend) foi
+> **abortada** porque a verificação de domínio inviabiliza o uso do domínio
+> público da Vercel (`*.vercel.app`). O fluxo aprovado é: o participante
+> acompanha o status da inscrição **dentro da própria plataforma**
+> ("Minhas Inscrições" / "Comprovantes"), que atualiza automaticamente para
+> **"Confirmada"** após o pagamento aprovado (webhook + Realtime).
 
 **Implementado:**
-
-#### Templates de Email
-- ✅ Email de inscrição pendente de pagamento
-- ✅ Email de inscrição confirmada
-- ✅ Design profissional e responsivo
-- ✅ Código de confirmação em destaque
-- ✅ Dados completos do evento
-- ✅ Instruções de pagamento
-- ✅ Link para comprovante
-
-#### Serviço de Email
-- ✅ Integração com Resend
-- ✅ Função `sendPendingPaymentEmail()`
-- ✅ Função `sendConfirmedEmail()`
-- ✅ Tratamento de erros
 
 #### Página de Comprovantes
 - ✅ Lista todas as inscrições do participante
