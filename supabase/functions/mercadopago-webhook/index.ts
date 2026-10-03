@@ -15,6 +15,16 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Helper: dispara email via Edge Function send-email (Resend).
+// Falha no envio de email NÃO deve quebrar o webhook.
+async function sendEmail(functions: any, payload: Record<string, unknown>) {
+  try {
+    await functions.invoke("send-email", { body: JSON.stringify(payload) });
+  } catch (err) {
+    console.error("Failed to send email:", err);
+  }
+}
+
 interface MercadoPagoWebhook {
   action: string;
   api_version: string;
@@ -79,10 +89,20 @@ serve(async (req) => {
       .select(`
         id,
         registration_id,
+        amount,
+        method,
         registrations!inner (
           id,
           user_id,
           race_id,
+          confirmation_code,
+          races (
+            id,
+            name,
+            date,
+            location,
+            city
+          ),
           profiles!inner (
             id,
             email,
@@ -172,8 +192,24 @@ serve(async (req) => {
         console.error("Error updating registration:", regError);
       }
 
-      // TODO: Send confirmation email via Supabase Edge Function or external service
-      // await sendConfirmationEmail(paymentRecord.registrations.profiles.email, ...);
+      // Send confirmation email via Resend (through send-email Edge Function)
+      const reg = paymentRecord.registrations;
+      const profile = reg?.profiles;
+      const race = reg?.races;
+      if (profile?.email) {
+        await sendEmail(supabase.functions, {
+          template: "confirmed",
+          to: profile.email,
+          participantName: profile.name,
+          eventName: race?.name,
+          eventDate: race?.date,
+          eventLocation: race ? `${race.location}, ${race.city}` : undefined,
+          confirmationCode: reg?.confirmation_code,
+          amount: Number(paymentRecord.amount),
+          paymentMethod: paymentRecord.method,
+          transactionId: String(payment.id),
+        });
+      }
     }
 
     // If rejected, cancel the registration
@@ -185,6 +221,20 @@ serve(async (req) => {
           updated_at: new Date().toISOString(),
         })
         .eq("id", paymentRecord.registration_id);
+
+      // Notify participant that payment was not approved
+      const reg = paymentRecord.registrations;
+      const profile = reg?.profiles;
+      const race = reg?.races;
+      if (profile?.email) {
+        await sendEmail(supabase.functions, {
+          template: "cancelled",
+          to: profile.email,
+          participantName: profile.name,
+          eventName: race?.name,
+          confirmationCode: reg?.confirmation_code,
+        });
+      }
     }
 
     return new Response(JSON.stringify({ received: true, status: newStatus }), {
