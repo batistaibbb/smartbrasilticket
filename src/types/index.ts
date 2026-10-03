@@ -95,7 +95,7 @@ export interface Registration {
   tshirtSize: string;
   kitId?: string; // ID do kit selecionado
   kitName?: string; // Nome do kit selecionado
-  status: 'pending_payment' | 'confirmed' | 'cancelled';
+  status: 'pending_payment' | 'confirmed' | 'cancelled' | 'rejected';
   paymentId?: string;
   confirmationCode: string;
   createdAt: string;
