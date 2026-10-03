@@ -74,11 +74,50 @@ export const supabaseHelpers = {
       throw new Error('Supabase not configured - running in demo mode');
     }
 
+    // Atenção: passar o objeto direto (não JSON.stringify).
+    // stringify duplicado corrompia o payload e quebrava a Edge Function.
     const { data, error } = await supabase.functions.invoke(functionName, {
-      body: JSON.stringify(body),
+      body,
     });
 
     if (error) throw error;
     return data;
   },
 };
+
+// ============================================
+// Integração Mercado Pago (via Edge Functions)
+// ============================================
+
+/** Cria pagamento PIX e retorna QR Code + código copia-e-cola */
+export async function createPixPayment(registrationId: string, amount: number, description?: string) {
+  return supabaseHelpers.invokeFunction('create-pix-payment', {
+    registrationId,
+    amount,
+    description,
+  });
+}
+
+/** Cria pagamento com cartão (token do Mercado Pago JS SDK) */
+export async function createCardPayment(params: {
+  registrationId: string;
+  amount: number;
+  description?: string;
+  token: string;
+  installments: number;
+  paymentMethodId: string;
+}) {
+  return supabaseHelpers.invokeFunction('create-card-payment', params);
+}
+
+/** Consulta o status de um pagamento no banco (Realtime atualiza sozinho, isto é para "Verificar agora") */
+export async function getPaymentStatus(paymentId: string) {
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from('payments')
+    .select('id, status, paid_at')
+    .eq('id', paymentId)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+}
