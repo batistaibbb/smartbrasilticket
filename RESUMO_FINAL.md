@@ -80,12 +80,7 @@
 - ✅ Contato de emergência
 
 **Arquivos criados:**
-- `src/lib/emailTemplates/pendingPayment.ts`
-- `src/lib/emailTemplates/confirmedRegistration.ts`
-- `src/lib/emailService.ts`
 - `src/pages/ReceiptsPage.tsx`
-- `SISTEMA_EMAILS.md`
-- `IMPLEMENTACAO_EMAILS.md`
 
 ---
 
@@ -103,15 +98,6 @@
    - Public Key
    - Webhook Secret (para validar assinaturas)
 
-3. **Configurar Resend**
-   - Acessar: https://resend.com
-   - Criar conta gratuita
-   - Obter API Key
-   - Adicionar em `.env.local`:
-     ```
-     VITE_RESEND_API_KEY=re_xxxxx
-     VITE_FROM_EMAIL=contato@smartbrasilticket.com.br
-     ```
 
 ### O que será implementado
 
@@ -183,13 +169,11 @@ Participante → Escolhe evento → Cria inscrição
 - [x] Tela de inscrições no admin
 - [x] Exportação PDF/Excel
 - [x] Remoção de taxa de serviço
-- [x] Sistema de emails
 - [x] Página de comprovantes
 - [x] Geração de PDF de comprovante
 - [x] Design profissional
 
 ### ⏳ Pendente
-- [ ] Configurar Resend API
 - [ ] Criar conta Mercado Pago Developers
 - [ ] Obter credenciais Mercado Pago
 - [ ] Implementar Edge Functions
@@ -201,17 +185,7 @@ Participante → Escolhe evento → Cria inscrição
 
 ## 🚀 Como Prosseguir
 
-### Passo 1: Configurar Resend
-1. Acesse https://resend.com
-2. Crie uma conta gratuita
-3. Obtenha a API Key
-4. Adicione no `.env.local`:
-   ```
-   VITE_RESEND_API_KEY=re_xxxxx
-   VITE_FROM_EMAIL=contato@smartbrasilticket.com.br
-   ```
-
-### Passo 2: Configurar Mercado Pago
+### Passo 1: Configurar Mercado Pago
 1. Acesse https://www.mercadopago.com.br/developers
 2. Crie uma aplicação
 3. Obtenha:
@@ -219,18 +193,17 @@ Participante → Escolhe evento → Cria inscrição
    - Public Key
 4. Me informe as credenciais
 
-### Passo 3: Implementar Webhook
+### Passo 2: Implementar Webhook
 Com as credenciais em mãos, vou:
 1. Criar Edge Functions no Supabase
 2. Implementar validação de assinatura
 3. Integrar com fluxo de pagamento
 4. Testar com pagamentos de teste
 
-### Passo 4: Testes
+### Passo 3: Testes
 1. Testar pagamento PIX
 2. Testar pagamento Cartão
 3. Testar webhook
-4. Testar emails
 5. Testar comprovantes
 
 ---
@@ -238,19 +211,14 @@ Com as credenciais em mãos, vou:
 ## 📁 Arquivos Criados/Modificados
 
 ### Novos Arquivos
-- `src/lib/emailTemplates/pendingPayment.ts`
-- `src/lib/emailTemplates/confirmedRegistration.ts`
-- `src/lib/emailService.ts`
 - `src/pages/ReceiptsPage.tsx`
-- `SISTEMA_EMAILS.md`
-- `IMPLEMENTACAO_EMAILS.md`
 - `AJUSTES_IMPLEMENTADOS.md`
 - `RESUMO_FINAL.md` (este arquivo)
 
 ### Arquivos Modificados
-- `src/App.tsx` - Adicionado sistema de emails e comprovantes
-- `src/types/index.ts` - Adicionados tipos para emails
-- `src/contexts/DataContext.tsx` - Adicionadas funções de email
+- `src/App.tsx` - Adicionado sistema de comprovantes
+- `src/types/index.ts` - Tipos de inscrição
+- `src/contexts/DataContext.tsx` - Sincronização via Realtime
 
 ### Bibliotecas Instaladas
 - `jspdf` - Geração de PDF
@@ -260,12 +228,6 @@ Com as credenciais em mãos, vou:
 ---
 
 ## 💡 Dicas para Implementação
-
-### Resend
-- Plano gratuito: 3.000 emails/mês
-- Domínio personalizado (opcional)
-- Templates HTML suportados
-- API simples e moderna
 
 ### Mercado Pago
 - Ambiente de teste disponível
@@ -310,7 +272,6 @@ Após implementar o webhook:
 
 **Me informe quando:**
 
-1. ✅ Conta Resend criada e API Key obtida
 2. ✅ Conta Mercado Pago Developers criada
 3. ✅ Credenciais Mercado Pago obtidas
 4. ✅ Pronto para implementar webhook
